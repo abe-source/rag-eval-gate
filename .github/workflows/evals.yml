@@ -10,6 +10,10 @@ concurrency:
 
 jobs:
   evals:
+    # dispatch or same-repo PRs only, never fork PRs (they run without the secret)
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
