@@ -1,0 +1,41 @@
+name: evals
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: evals-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  evals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 26
+          cache: npm
+
+      - run: npm ci
+
+      - name: Static checks
+        run: |
+          npm run typecheck
+          npm run lint
+          npm run format:check
+
+      - run: npm test
+
+      - name: Cache reranker model
+        uses: actions/cache@v4
+        with:
+          path: node_modules/@huggingface/transformers/.cache
+          key: hf-reranker-v1
+
+      - run: npm run eval

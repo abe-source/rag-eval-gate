@@ -1,0 +1,42 @@
+{
+  "name": "rag-eval-gate",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "postinstall": "node scripts/patch-deepeval.mjs",
+    "embed": "tsx scripts/embed.ts",
+    "ask": "tsx scripts/ask.ts",
+    "eval": "deepeval test run evals",
+    "typecheck": "tsc --noEmit",
+    "eval:hallucination": "deepeval test run evals/tests/catches-hallucination.test.ts",
+    "eval:answer": "deepeval test run evals/tests/answer-quality.test.ts",
+    "eval:retrieval": "deepeval test run evals/tests/retrieval-quality.test.ts",
+    "eval:refusal": "deepeval test run evals/tests/refusal.test.ts",
+    "test": "vitest run --dir test",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "dependencies": {
+    "@huggingface/transformers": "^4.2.0",
+    "openai": "^4.104.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@sentry/node": "^10.73.0",
+    "deepeval": "^0.9.13",
+    "eslint": "^10.10.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.12.0",
+    "prettier": "^3.9.6",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.69.0",
+    "vitest": "^4.1.11"
+  }
+}

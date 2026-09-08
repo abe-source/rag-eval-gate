@@ -1,0 +1,6 @@
+node_modules
+src/index
+src/corpus
+package-lock.json
+.deepeval
+dist

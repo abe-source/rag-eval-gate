@@ -1,0 +1,97 @@
+[
+  {
+    "category": "answerable",
+    "input": "What is the operating temperature range of the Nyx R7?",
+    "expectedOutput": "-10 C to 45 C."
+  },
+  {
+    "category": "answerable",
+    "input": "What is the measurement range of the Nyx R7?",
+    "expectedOutput": "0.3 m to 120 m."
+  },
+  {
+    "category": "answerable",
+    "input": "How long does the Nyx R7 battery last on a full charge?",
+    "expectedOutput": "About 4.5 hours of continuous scanning on a 5,200 mAh battery."
+  },
+  {
+    "category": "answerable",
+    "input": "How long does it take to fully charge the Nyx R7?",
+    "expectedOutput": "2 hours using the included 65 W USB-C Power Delivery charger."
+  },
+  {
+    "category": "answerable",
+    "input": "How much internal storage does the Nyx R7 have?",
+    "expectedOutput": "256 GB internal SSD. There is no SD card slot."
+  },
+  {
+    "category": "answerable",
+    "input": "How much does the Nyx R7 weigh?",
+    "expectedOutput": "1.15 kg with the battery installed."
+  },
+  {
+    "category": "answerable",
+    "input": "What is the IP rating of the Nyx R7?",
+    "expectedOutput": "IP54 (dust-protected and splash-resistant)."
+  },
+  {
+    "category": "answerable",
+    "input": "What file formats can the Nyx R7 export?",
+    "expectedOutput": "The native .rvz format and the .rvx interchange format."
+  },
+  {
+    "category": "answerable",
+    "input": "How much does the Nyx R7 base kit cost?",
+    "expectedOutput": "8,900 EUR."
+  },
+  {
+    "category": "answerable",
+    "input": "What warranty does the Nyx R7 come with?",
+    "expectedOutput": "A 2-year limited warranty."
+  },
+  {
+    "category": "answerable",
+    "input": "At what temperature does the Nyx R7 pause scanning from overheating?",
+    "expectedOutput": "When the internal temperature exceeds 60 C."
+  },
+  {
+    "category": "answerable",
+    "input": "How much battery does the Nyx R7 need to run a firmware update?",
+    "expectedOutput": "More than 20 percent battery."
+  },
+  {
+    "category": "answerable",
+    "input": "What does error code E03 mean on the Nyx R7?",
+    "expectedOutput": "Storage full. Transfer and delete scans to free space."
+  },
+  {
+    "category": "answerable",
+    "input": "What laser does the Nyx R7 use?",
+    "expectedOutput": "A Class 1 eye-safe laser at 905 nm."
+  },
+  {
+    "category": "refusal",
+    "input": "Does the Nyx R7 have GPS?",
+    "expectedOutput": "I don't know based on the provided documents."
+  },
+  {
+    "category": "refusal",
+    "input": "Does the Nyx R7 support 5G or cellular connectivity?",
+    "expectedOutput": "I don't know based on the provided documents."
+  },
+  {
+    "category": "refusal",
+    "input": "What color options are available for the Nyx R7?",
+    "expectedOutput": "I don't know based on the provided documents."
+  },
+  {
+    "category": "refusal",
+    "input": "What is the price of the Nyx R7 in US dollars?",
+    "expectedOutput": "I don't know based on the provided documents."
+  },
+  {
+    "category": "refusal",
+    "input": "How does the Nyx R7 compare to the Leica BLK2GO?",
+    "expectedOutput": "I don't know based on the provided documents."
+  }
+]

@@ -1,0 +1,8 @@
+# Copy to .envrc, then run `direnv allow`.
+#
+# The OpenAI API key is stored in the macOS Keychain, not in any file:
+#   security add-generic-password -a "$USER" -s rag-eval-gate-openai -w
+#   (paste the key at the hidden prompt; add -U to replace an existing entry)
+#
+# Use the Keychain Access GUI to add it if the CLI prompt truncates a long paste.
+export OPENAI_API_KEY="$(security find-generic-password -s rag-eval-gate-openai -w)"

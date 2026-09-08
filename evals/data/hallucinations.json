@@ -1,0 +1,19 @@
+[
+  {
+    "input": "What is the operating temperature range of the Nyx R7?",
+    "retrievalContext": ["The R7 operates in temperatures from -10 C to 45 C."],
+    "actualOutput": "The Nyx R7 operates from -40 C to 85 C."
+  },
+  {
+    "input": "How much does the Nyx R7 weigh?",
+    "retrievalContext": ["The R7 weighs 1.15 kg with the battery installed."],
+    "actualOutput": "The Nyx R7 weighs 3.2 kg."
+  },
+  {
+    "input": "How much internal storage does the Nyx R7 have?",
+    "retrievalContext": [
+      "The R7 has 256 GB of internal SSD storage. There is no removable SD card slot."
+    ],
+    "actualOutput": "The Nyx R7 has 1 TB of storage and a microSD card slot."
+  }
+]

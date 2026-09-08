@@ -1,0 +1,17 @@
+node_modules/
+
+# Secrets / local config
+.env
+.env.local
+.env.*.local
+.envrc
+!.envrc.example
+
+# DeepEval run artifacts (keep .deepeval/.deepeval, the model config, committed)
+.deepeval-cache.json
+.deepeval_telemetry.txt
+.deepeval/.latest_test_run.json
+.deepeval/test-run-*/
+
+*.log
+dist/
