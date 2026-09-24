@@ -1,11 +1,13 @@
 import data from "@evals/data/goldens.json";
 
-export type Category = "answerable" | "refusal";
+export type Category = "answerable" | "refusal" | "adversarial";
 
 export interface Golden {
   category: Category;
   input: string;
   expectedOutput: string;
+  // default "exact" (canon-equal); "includes" checks a canon-contain match instead.
+  assertion?: "exact" | "includes";
 }
 
 const all = data as Golden[];

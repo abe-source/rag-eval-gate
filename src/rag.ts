@@ -10,10 +10,12 @@ import {
   EMBEDDING_MODEL,
   GENERATION_MODEL,
   INDEX_FILE,
+  REFUSAL,
   SYSTEM_PROMPT,
   TOP_K,
 } from "@/config";
 import { rerankScores } from "@/rerank";
+import { isContextBypassAttempt, isMetaOrSummaryAttempt } from "@/guardrails";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 
@@ -178,6 +180,11 @@ export async function hybridRetrieve(
   bm25: Bm25Index,
   k = TOP_K,
 ): Promise<Chunk[]> {
+  // RERANK=off short-circuits to vector-only so the cross-encoder model never loads.
+  if (process.env.RERANK === "off") {
+    return retrieve(queryEmbedding, chunks, k);
+  }
+
   const seen = new Set<string>();
   const candidates: Chunk[] = [];
   for (const c of [
@@ -231,6 +238,9 @@ function loadBm25(chunks: Chunk[]): Bm25Index {
 }
 
 export async function askRag(question: string): Promise<RagResult> {
+  if (isContextBypassAttempt(question) || isMetaOrSummaryAttempt(question)) {
+    return { answer: REFUSAL, context: [] };
+  }
   const index = loadIndex();
   const bm25 = loadBm25(index);
   const [queryEmbedding] = await embed([question]);

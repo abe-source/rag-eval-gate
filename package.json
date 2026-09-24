@@ -16,6 +16,7 @@
     "eval:answer": "deepeval test run evals/tests/answer-quality.test.ts",
     "eval:retrieval": "deepeval test run evals/tests/retrieval-quality.test.ts",
     "eval:refusal": "deepeval test run evals/tests/refusal.test.ts",
+    "eval:adversarial": "deepeval test run evals/tests/adversarial-safety.test.ts",
     "test": "vitest run --dir test",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
