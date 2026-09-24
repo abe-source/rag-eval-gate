@@ -16,5 +16,5 @@
       "@evals/*": ["evals/*"]
     }
   },
-  "include": ["src", "scripts", "evals"]
+  "include": ["src", "scripts", "evals", "test"]
 }
