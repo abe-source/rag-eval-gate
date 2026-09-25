@@ -14,5 +14,6 @@ export default defineConfig({
   test: {
     env: { DEEPEVAL_TELEMETRY_OPT_OUT: "1" },
     slowTestThreshold: 60000,
+    reporters: ["default", "allure-vitest/reporter"],
   },
 });

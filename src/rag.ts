@@ -10,10 +10,17 @@ import {
   EMBEDDING_MODEL,
   GENERATION_MODEL,
   INDEX_FILE,
+  REFUSAL,
   SYSTEM_PROMPT,
   TOP_K,
 } from "@/config";
 import { rerankScores } from "@/rerank";
+import {
+  isContextBypassAttempt,
+  isMetaOrSummaryAttempt,
+  isVerbatimContextLeak,
+} from "@/guardrails";
+import { tokenize } from "@/text";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 
@@ -111,13 +118,6 @@ export function retrieve(queryEmbedding: number[], chunks: Chunk[], k = TOP_K): 
 
 // --- lexical retrieval (BM25) ---------------------------------------------------
 
-export function tokenize(text: string): string[] {
-  return text
-    .toLowerCase()
-    .split(/[^a-z0-9]+/)
-    .filter(Boolean);
-}
-
 export interface Bm25Index {
   chunks: Chunk[];
   tf: Map<string, number>[];
@@ -178,6 +178,11 @@ export async function hybridRetrieve(
   bm25: Bm25Index,
   k = TOP_K,
 ): Promise<Chunk[]> {
+  // RERANK=off short-circuits to vector-only so the cross-encoder model never loads.
+  if (process.env.RERANK === "off") {
+    return retrieve(queryEmbedding, chunks, k);
+  }
+
   const seen = new Set<string>();
   const candidates: Chunk[] = [];
   for (const c of [
@@ -231,6 +236,9 @@ function loadBm25(chunks: Chunk[]): Bm25Index {
 }
 
 export async function askRag(question: string): Promise<RagResult> {
+  if (isContextBypassAttempt(question) || isMetaOrSummaryAttempt(question)) {
+    return { answer: REFUSAL, context: [] };
+  }
   const index = loadIndex();
   const bm25 = loadBm25(index);
   const [queryEmbedding] = await embed([question]);
@@ -238,5 +246,8 @@ export async function askRag(question: string): Promise<RagResult> {
   const top = await hybridRetrieve(question, queryEmbedding, index, bm25);
   const context = top.map((c) => c.text);
   const answer = await generate(question, context);
+  if (isVerbatimContextLeak(answer, context)) {
+    return { answer: REFUSAL, context };
+  }
   return { answer, context };
 }

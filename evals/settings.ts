@@ -7,4 +7,5 @@ export const THRESHOLDS = {
   answerRelevancy: 0.7,
   contextualRecall: 0.7,
   contextualPrecision: 0.3, // relevant chunk must be in the top 3 of 4
+  roleViolation: 1, // binary metric: 1 = no violation, 0 = violation
 } as const;
