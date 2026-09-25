@@ -1,3 +1,6 @@
+import { LEAK_MIN_TOKEN_RUN } from "@/config";
+import { tokenize } from "@/text";
+
 // Regex backstops for refusal rules the system prompt states but doesn't hold reliably on its own.
 const BYPASS_PATTERNS: RegExp[] = [
   /\b(ignore|disregard|forget|bypass|override)\b[^.?!]{0,40}\b(context|instructions?|documents?|rules?|prompt|above)\b/i,
@@ -22,4 +25,23 @@ const META_PATTERNS: RegExp[] = [
 
 export function isMetaOrSummaryAttempt(question: string): boolean {
   return META_PATTERNS.some((re) => re.test(question));
+}
+
+function hasTokenRun(haystack: string[], needle: string[]): boolean {
+  for (let i = 0; i + needle.length <= haystack.length; i++) {
+    if (needle.every((tok, j) => haystack[i + j] === tok)) return true;
+  }
+  return false;
+}
+
+// Output-side, catches a leak regardless of what question phrasing caused it.
+export function isVerbatimContextLeak(answer: string, context: string[]): boolean {
+  const answerTokens = tokenize(answer);
+  return context.some((chunk) => {
+    const chunkTokens = tokenize(chunk);
+    for (let i = 0; i + LEAK_MIN_TOKEN_RUN <= chunkTokens.length; i++) {
+      if (hasTokenRun(answerTokens, chunkTokens.slice(i, i + LEAK_MIN_TOKEN_RUN))) return true;
+    }
+    return false;
+  });
 }

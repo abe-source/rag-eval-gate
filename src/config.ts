@@ -7,6 +7,7 @@ export const BM25_K1 = 1.2;
 export const BM25_B = 0.75;
 export const CANDIDATE_K = 8;
 export const RERANK_MODEL = process.env.RERANK_MODEL ?? "Xenova/bge-reranker-base";
+export const LEAK_MIN_TOKEN_RUN = 10;
 export const REFUSAL = "I don't know based on the provided documents.";
 export const SYSTEM_PROMPT =
   "You answer strictly from the provided context. Answer only the specific question " +

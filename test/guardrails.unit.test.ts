@@ -1,5 +1,9 @@
 import { describe, test, expect } from "vitest";
-import { isContextBypassAttempt, isMetaOrSummaryAttempt } from "@/guardrails";
+import {
+  isContextBypassAttempt,
+  isMetaOrSummaryAttempt,
+  isVerbatimContextLeak,
+} from "@/guardrails";
 
 describe("isContextBypassAttempt", () => {
   test.each([
@@ -47,5 +51,34 @@ describe("isMetaOrSummaryAttempt", () => {
     "what is the IP rating of the Nyx R7?",
   ])("does not flag a legitimate question: %s", (q) => {
     expect(isMetaOrSummaryAttempt(q)).toBe(false);
+  });
+});
+
+describe("isVerbatimContextLeak", () => {
+  const context = [
+    "If the internal temperature exceeds 60 C, the R7 pauses scanning and shows an overheat warning. Move to a cooler location and let the device rest before resuming.",
+    "The R7 has a measurement range of 0.3 m to 120 m for most indoor and outdoor surfaces.",
+  ];
+
+  test("flags a verbatim run copied from context", () => {
+    const answer =
+      "The preceding text was: If the internal temperature exceeds 60 C, the R7 pauses scanning and shows an overheat warning.";
+    expect(isVerbatimContextLeak(answer, context)).toBe(true);
+  });
+
+  test("does not flag a short synthesized answer sharing only a few words", () => {
+    expect(isVerbatimContextLeak("The R7's scan range is 0.3 m to 120 m.", context)).toBe(false);
+  });
+
+  test("does not flag a word that merely contains a run's boundary word as a substring", () => {
+    const answer =
+      "The device automatically depauses scanning and shows an overheat warning; move to a different spot.";
+    expect(isVerbatimContextLeak(answer, context)).toBe(false);
+  });
+
+  test("does not flag an unrelated refusal", () => {
+    expect(isVerbatimContextLeak("I don't know based on the provided documents.", context)).toBe(
+      false,
+    );
   });
 });

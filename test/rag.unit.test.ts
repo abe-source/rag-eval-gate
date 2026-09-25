@@ -1,5 +1,6 @@
 import { describe, test, expect } from "vitest";
-import { tokenize, cosine, chunk, retrieve, buildBm25Index, bm25Search, type Chunk } from "@/rag";
+import { cosine, chunk, retrieve, buildBm25Index, bm25Search, type Chunk } from "@/rag";
+import { tokenize } from "@/text";
 
 const mkChunk = (id: string, text: string, embedding: number[]): Chunk => ({
   id,

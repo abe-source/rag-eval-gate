@@ -15,7 +15,12 @@ import {
   TOP_K,
 } from "@/config";
 import { rerankScores } from "@/rerank";
-import { isContextBypassAttempt, isMetaOrSummaryAttempt } from "@/guardrails";
+import {
+  isContextBypassAttempt,
+  isMetaOrSummaryAttempt,
+  isVerbatimContextLeak,
+} from "@/guardrails";
+import { tokenize } from "@/text";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 
@@ -112,13 +117,6 @@ export function retrieve(queryEmbedding: number[], chunks: Chunk[], k = TOP_K): 
 }
 
 // --- lexical retrieval (BM25) ---------------------------------------------------
-
-export function tokenize(text: string): string[] {
-  return text
-    .toLowerCase()
-    .split(/[^a-z0-9]+/)
-    .filter(Boolean);
-}
 
 export interface Bm25Index {
   chunks: Chunk[];
@@ -248,5 +246,8 @@ export async function askRag(question: string): Promise<RagResult> {
   const top = await hybridRetrieve(question, queryEmbedding, index, bm25);
   const context = top.map((c) => c.text);
   const answer = await generate(question, context);
+  if (isVerbatimContextLeak(answer, context)) {
+    return { answer: REFUSAL, context };
+  }
   return { answer, context };
 }
