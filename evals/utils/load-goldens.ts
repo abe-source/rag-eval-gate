@@ -7,7 +7,7 @@ export interface Golden {
   input: string;
   expectedOutput: string;
   // default "exact" (canon-equal); "includes" checks a canon-contain match instead.
-  assertion?: "exact" | "includes";
+  assertionType?: "exact" | "includes";
 }
 
 const all = data as Golden[];
