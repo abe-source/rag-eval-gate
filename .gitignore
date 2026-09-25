@@ -12,6 +12,8 @@ node_modules/
 .deepeval_telemetry.txt
 .deepeval/.latest_test_run.json
 .deepeval/test-run-*/
+allure-results/
+allure-report/
 
 *.log
 dist/
