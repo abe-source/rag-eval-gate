@@ -15,7 +15,11 @@ import {
   TOP_K,
 } from "@/config";
 import { rerankScores } from "@/rerank";
-import { isContextBypassAttempt, isMetaOrSummaryAttempt } from "@/guardrails";
+import {
+  isContextBypassAttempt,
+  isMetaOrSummaryAttempt,
+  isVerbatimContextLeak,
+} from "@/guardrails";
 import { tokenize } from "@/text";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -242,9 +246,8 @@ export async function askRag(question: string): Promise<RagResult> {
   const top = await hybridRetrieve(question, queryEmbedding, index, bm25);
   const context = top.map((c) => c.text);
   const answer = await generate(question, context);
-  // TEMPORARY: output-side guard disabled to demonstrate the red run, restore before merging
-  // if (isVerbatimContextLeak(answer, context)) {
-  //   return { answer: REFUSAL, context };
-  // }
+  if (isVerbatimContextLeak(answer, context)) {
+    return { answer: REFUSAL, context };
+  }
   return { answer, context };
 }
